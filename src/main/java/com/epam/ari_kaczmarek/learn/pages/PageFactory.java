@@ -1,22 +1,16 @@
 package com.epam.ari_kaczmarek.learn.pages;
 
-import java.time.Duration;
-
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import com.epam.ari_kaczmarek.learn.WebDriverSingleton;
+import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverConditions.urlStartingWith;
 
 public class PageFactory {
     public static <T extends Page> T createPage(Class<T> pageClass, boolean navigate) {
         try {
-            WebDriver driver = WebDriverSingleton.getWebDriver();
-            T page = pageClass.getDeclaredConstructor(WebDriver.class).newInstance(driver);
+            T page = pageClass.getDeclaredConstructor().newInstance();
             if(navigate)
-                driver.get(page.getUrl());
+                open(page.getUrl());
             else {
-                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-                wait.until(d -> d.getCurrentUrl().startsWith(page.getUrl()));
+                urlStartingWith(page.getUrl());
             }
             return page;
         } catch(Exception e) {

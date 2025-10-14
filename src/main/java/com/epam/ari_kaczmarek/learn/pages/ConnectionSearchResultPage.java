@@ -1,13 +1,13 @@
 package com.epam.ari_kaczmarek.learn.pages;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 
 public class ConnectionSearchResultPage extends Page {
 
@@ -16,32 +16,29 @@ public class ConnectionSearchResultPage extends Page {
     private final By firstResultDepartureTime = By.xpath("//div[@class='searching-results-list']/div[@class='searching-result'][1]/descendant::div[@class='departure-time']/span[@class='time']");
     private final By firstResultDepartureDate = By.xpath("//div[@class='searching-results-list']/div[@class='searching-result'][1]/descendant::div[@class='departure-time']/span[@class='date']");
     
-    public ConnectionSearchResultPage(WebDriver webDriver) {
-        super(webDriver);
+    public ConnectionSearchResultPage() {
         this.url = "https://kolejedolnoslaskie.pl/wyszukiwarka-polaczen/";
     }
 
     public void waitUntilSearchResultsReady() {
-        WebDriverWait wait;
-        wait = new WebDriverWait(webDriver, Duration.ofSeconds(20));
-        wait.until(d -> d.findElement(firstResultFromStation).isDisplayed());
+        $(firstResultFromStation).shouldBe(visible);
     }
 
     public String getFirstResultFromStation() {
-        return webDriver.findElement(firstResultFromStation).getText();
+        return $(firstResultFromStation).text();
     }
 
     public String getFirstResultToStation() {
-        return webDriver.findElement(firstResultToStation).getText();
+        return $(firstResultToStation).text();
     }
 
     public LocalTime getFirstResultDepartureTime() {
-        String timeString = webDriver.findElement(firstResultDepartureTime).getText();
+        String timeString = $(firstResultDepartureTime).text();
         return LocalTime.parse(timeString);
     }
 
     public LocalDate getFirstResultDepartureDate() {
-        String dateString = webDriver.findElement(firstResultDepartureDate).getText();
+        String dateString = $(firstResultDepartureDate).text();
         String[] parts = dateString.split(" ");
         return LocalDate.of(LocalDate.now().getYear(), getMonthFromString(parts[1]), Integer.parseInt(parts[0]));
     }

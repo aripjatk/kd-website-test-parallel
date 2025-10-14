@@ -1,16 +1,18 @@
 package com.epam.ari_kaczmarek.learn.pages;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.clickable;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
+
+import static org.testng.Assert.fail;
 
 import com.epam.ari_kaczmarek.learn.ConnectionQuery;
 
@@ -32,34 +34,36 @@ public class KDHomePage extends Page {
 
     private final By searchButton = By.xpath("//button[@type='submit']");
 
-    public KDHomePage(WebDriver webDriver) {
-        super(webDriver);
+    public KDHomePage() {
         this.url = "https://kolejedolnoslaskie.pl/";
     }
 
     public void denyCookies() {
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.elementToBeClickable(denyCookiesButton)).click();
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(denyCookiesButton));
+        $(denyCookiesButton)
+            .shouldBe(clickable)
+            .click();
     }
 
     private void enterFromStation(String station) {
         // must wait because page refreshes after cookie denial
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(fromStationInput)).sendKeys(station);
+        try {
+            Thread.sleep(5000);
+        } catch(InterruptedException e) {
+            fail("Failed to wait for refresh after cookie denial");
+        }
+        $(fromStationInput).shouldBe(clickable).type(station);
     }
 
     private void enterToStation(String station) {
-        WebElement toInput = webDriver.findElement(toStationInput);
-        toInput.sendKeys(station);
+        $(toStationInput).shouldBe(clickable).type(station);
     }
 
     private void enterDate(LocalDate date) {
-        webDriver.findElement(calendarButton).click();
+        $(calendarButton).click();
 
         Locale polish = new Locale("pl", "PL");
         DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern("dd LLLL yyyy", polish);
-        String currentlySelectedDateString = webDriver.findElement(monthAndYearLabel).getText();
+        String currentlySelectedDateString = $(monthAndYearLabel).text();
         LocalDate currentlySelectedDate = LocalDate.parse("01 " + currentlySelectedDateString, monthYearFormatter);
 
         switch(date.getMonth().compareTo(currentlySelectedDate.getMonth())) {
@@ -67,20 +71,20 @@ public class KDHomePage extends Page {
                 break;
             case 1:
                 while(date.getMonth().compareTo(currentlySelectedDate.getMonth()) > 0) {
-                    webDriver.findElement(nextMonthButton).click();
+                    $(nextMonthButton).click();
                     currentlySelectedDate = currentlySelectedDate.plusMonths(1);
                 }
                 break;
             case -1:
                 while(date.getMonth().compareTo(currentlySelectedDate.getMonth()) < 0) {
-                    webDriver.findElement(previousMonthButton).click();
+                    $(previousMonthButton).click();
                     currentlySelectedDate = currentlySelectedDate.minusMonths(1);
                 }
                 break;
         }
 
         String dayButtonXPath = String.format(dayButtonFormat, date.getDayOfMonth());
-        webDriver.findElement(By.xpath(dayButtonXPath)).click();
+        $x(dayButtonXPath).click();
     }
 
     private void enterTime(LocalTime time) {
@@ -88,13 +92,13 @@ public class KDHomePage extends Page {
             throw new IllegalArgumentException("Minutes must be multiple of 5");
         }
 
-        webDriver.findElement(timeButton).click();
+        $(timeButton).click();
 
         String hourButtonXPath = String.format(hourButtonFormat, String.format("%02d", time.getHour()));
-        webDriver.findElement(By.xpath(hourButtonXPath)).click();
+        $x(hourButtonXPath).click();
 
         String minuteButtonXPath = String.format(minuteButtonFormat, String.format("%02d", time.getMinute()));
-        webDriver.findElement(By.xpath(minuteButtonXPath)).click();
+        $x(minuteButtonXPath).click();
     }
 
     public void enterConnectionQuery(ConnectionQuery query) {
@@ -109,6 +113,6 @@ public class KDHomePage extends Page {
     }
 
     public void clickSearchButton() {
-        webDriver.findElement(searchButton).click();
+        $(searchButton).click();
     }
 }

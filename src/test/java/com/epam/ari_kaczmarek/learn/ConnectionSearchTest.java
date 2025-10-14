@@ -5,6 +5,9 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Test;
+
 import com.epam.ari_kaczmarek.learn.pages.KDHomePage;
 import com.epam.ari_kaczmarek.learn.pages.PageFactory;
 import com.epam.ari_kaczmarek.learn.steps.DenyCookiesStep;
@@ -13,20 +16,11 @@ import com.epam.ari_kaczmarek.learn.steps.SearchStep;
 import com.epam.ari_kaczmarek.learn.steps.Step;
 import com.epam.ari_kaczmarek.learn.steps.ValidateConnectionSearchResultPageStep;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 
-public class ConnectionSearchTest extends TestCase {
-    public ConnectionSearchTest( String testName ) {
-        super( testName );
-    }
+public class ConnectionSearchTest {
 
-    public static Test suite() {
-        return new TestSuite( ConnectionSearchTest.class );
-    }
-
-    public List<Step> createSteps(ConnectionQuery query) {
+    private List<Step> createSteps(ConnectionQuery query) {
         KDHomePage homePage = PageFactory.createPage(KDHomePage.class, true);
         List<Step> steps = Arrays.asList(new Step[] {
             new DenyCookiesStep(homePage),
@@ -40,6 +34,12 @@ public class ConnectionSearchTest extends TestCase {
         return steps;
     }
 
+    @AfterMethod
+    public void closeBrowser() {
+        closeWebDriver();
+    }
+
+    @Test
     public void testConnectionSearchToday() {
         ConnectionQuery query = new ConnectionQueryBuilder()
             .setFromStation("Wrocław Główny")
@@ -49,6 +49,8 @@ public class ConnectionSearchTest extends TestCase {
             .build();
         createSteps(query).get(0).run();
     }
+
+    @Test
     public void testConnectionSearchNextMonth() {
         ConnectionQuery query = new ConnectionQueryBuilder()
             .setFromStation("Wrocław Główny")
