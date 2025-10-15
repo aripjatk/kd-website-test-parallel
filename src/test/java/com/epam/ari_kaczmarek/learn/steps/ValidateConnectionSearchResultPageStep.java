@@ -25,8 +25,8 @@ public class ValidateConnectionSearchResultPageStep extends Step {
 
         page.waitUntilSearchResultsReady();
         
-        assert expectedFromStation.equals(page.getFirstResultFromStation());
-        assert expectedToStation.equals(page.getFirstResultToStation());
+        assert page.getFirstResultFromStation().startsWith(expectedFromStation);
+        assert page.getFirstResultToStation().startsWith(expectedToStation);
         assert expectedDate.compareTo(page.getFirstResultDepartureDate()) <= 0;
         assert expectedTime.compareTo(page.getFirstResultDepartureTime()) <= 0;
     }

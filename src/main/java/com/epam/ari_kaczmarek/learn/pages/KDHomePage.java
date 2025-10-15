@@ -19,8 +19,8 @@ import com.epam.ari_kaczmarek.learn.ConnectionQuery;
 public class KDHomePage extends Page {
     private final By denyCookiesButton = By.id("CybotCookiebotDialogBodyButtonDecline");
 
-    private final By fromStationInput = By.xpath("//input[@placeholder='Stacja początkowa']");
-    private final By toStationInput = By.xpath("//input[@placeholder='Stacja końcowa']");
+    private final By fromStationInput = By.xpath("//input[contains(@name,'fromText')]");
+    private final By toStationInput = By.xpath("//input[contains(@name,'toText')]");
 
     private final By calendarButton = By.xpath("//div[contains(@class, 'dateSelect')]");
     private final By monthAndYearLabel = By.xpath("//div[@id='datepicker']/descendant::h2");

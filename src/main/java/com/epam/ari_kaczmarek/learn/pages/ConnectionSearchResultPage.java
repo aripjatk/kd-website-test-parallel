@@ -7,6 +7,7 @@ import java.time.Month;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.interactable;
 import static com.codeborne.selenide.Selenide.$;
 
 public class ConnectionSearchResultPage extends Page {
@@ -15,9 +16,14 @@ public class ConnectionSearchResultPage extends Page {
     private final By firstResultToStation = By.xpath("//div[@class='searching-results-list']/div[@class='searching-result'][1]/descendant::span[@class='arrival']");
     private final By firstResultDepartureTime = By.xpath("//div[@class='searching-results-list']/div[@class='searching-result'][1]/descendant::div[@class='departure-time']/span[@class='time']");
     private final By firstResultDepartureDate = By.xpath("//div[@class='searching-results-list']/div[@class='searching-result'][1]/descendant::div[@class='departure-time']/span[@class='date']");
+    private final By firstResultBuyTicketButton = By.xpath("//div[@class='searching-results-list']/div[@class='searching-result'][1]/descendant::a[starts-with(@class, 'btnBuyTicket')]");
     
     public ConnectionSearchResultPage() {
-        this.url = "https://kolejedolnoslaskie.pl/wyszukiwarka-polaczen/";
+        url = "https://kolejedolnoslaskie.pl/wyszukiwarka-polaczen/";
+    }
+
+    public void clickFirstResultBuyTicketButton() {
+        $(firstResultBuyTicketButton).shouldBe(interactable).click();
     }
 
     public void waitUntilSearchResultsReady() {
