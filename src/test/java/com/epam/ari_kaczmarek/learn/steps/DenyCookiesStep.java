@@ -1,7 +1,5 @@
 package com.epam.ari_kaczmarek.learn.steps;
 
-import org.openqa.selenium.TimeoutException;
-
 import com.epam.ari_kaczmarek.learn.pages.KDHomePage;
 
 public class DenyCookiesStep extends Step {
@@ -16,7 +14,7 @@ public class DenyCookiesStep extends Step {
     protected void performStep() {
         try {
             homePage.denyCookies();
-        } catch(TimeoutException e) {
+        } catch(Throwable t) {
             // cookies have already been denied, just continue
         }
     }

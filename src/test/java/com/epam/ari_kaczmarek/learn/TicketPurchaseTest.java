@@ -22,7 +22,7 @@ import com.epam.ari_kaczmarek.learn.steps.ValidateConnectionSearchResultPageStep
 import com.epam.ari_kaczmarek.learn.steps.ValidatePurchaseSummaryPageStep;
 
 @Listeners({ ScreenShooter.class })
-public class TicketPurchaseTest {
+public class TicketPurchaseTest extends AbstractTest {
 
     private List<Step> createSteps(ConnectionQuery query, String firstName, String lastName, String email) {
         KDHomePage homePage = PageFactory.createPage(KDHomePage.class, true);

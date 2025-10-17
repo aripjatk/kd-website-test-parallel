@@ -1,2 +1,6 @@
+.mvn/
 build/
 target/
+*.class
+*.log
+*.jar

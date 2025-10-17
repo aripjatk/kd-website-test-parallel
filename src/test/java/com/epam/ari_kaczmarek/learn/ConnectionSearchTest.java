@@ -5,12 +5,9 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import static com.codeborne.selenide.Selenide.closeWebDriver;
 import com.codeborne.selenide.testng.ScreenShooter;
 import com.epam.ari_kaczmarek.learn.pages.KDHomePage;
 import com.epam.ari_kaczmarek.learn.pages.PageFactory;
@@ -21,17 +18,7 @@ import com.epam.ari_kaczmarek.learn.steps.Step;
 import com.epam.ari_kaczmarek.learn.steps.ValidateConnectionSearchResultPageStep;
 
 @Listeners({ ScreenShooter.class })
-public class ConnectionSearchTest {
-
-    @BeforeSuite
-    public void setUp() {
-        ScreenShooter.captureSuccessfulTests = true;
-    }
-
-    @AfterMethod
-    public void closeBrowser() {
-        closeWebDriver();
-    }
+public class ConnectionSearchTest extends AbstractTest {
 
     private List<Step> createSteps(ConnectionQuery query) {
         KDHomePage homePage = PageFactory.createPage(KDHomePage.class, true);
