@@ -12,7 +12,7 @@ import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 import com.codeborne.selenide.testng.ScreenShooter;
 
 public abstract class AbstractTest {
-    protected ThreadLocal<WebDriver> driver;
+    protected WebDriver driver;
 
     @BeforeSuite
     public void setParameters() {
@@ -23,19 +23,19 @@ public abstract class AbstractTest {
     @Parameters("browser")
     public void setUpDriver(String browser) {
         if(browser.equalsIgnoreCase("Chrome")) {
-            driver = ThreadLocal.withInitial(() -> new ChromeDriver());
+            driver = new ChromeDriver();
         } else if(browser.equalsIgnoreCase("Firefox")) {
-            driver = ThreadLocal.withInitial(() -> new FirefoxDriver());
+            driver = new FirefoxDriver();
         } else {
             throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
-        setWebDriver(driver.get());
+        setWebDriver(driver);
    }
 
    @AfterMethod
    public void tearDown() {
        if(driver != null) {
-           driver.get().quit();
+           driver.quit();
        }
    }
 }
