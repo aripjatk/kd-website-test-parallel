@@ -1,5 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="KD Website Test Suite" parallel="tests" thread-count="4">
+  <parameter name="node" value="http://localhost:4444"/>
   <test name="Connection Search Test - Firefox">
     <parameter name="browser" value="Firefox"/>
     <classes>

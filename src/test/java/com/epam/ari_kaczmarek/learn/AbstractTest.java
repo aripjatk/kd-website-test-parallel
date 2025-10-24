@@ -1,8 +1,13 @@
 package com.epam.ari_kaczmarek.learn;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
@@ -20,16 +25,24 @@ public abstract class AbstractTest {
     }
 
     @BeforeMethod
-    @Parameters("browser")
-    public void setUpDriver(String browser) {
-        if(browser.equalsIgnoreCase("Chrome")) {
-            driver = new ChromeDriver();
-        } else if(browser.equalsIgnoreCase("Firefox")) {
-            driver = new FirefoxDriver();
-        } else {
-            throw new IllegalArgumentException("Unsupported browser: " + browser);
+    @Parameters({"browser", "node"})
+    public void setUpDriver(String browser, String node) {
+        try {
+            if(browser.equalsIgnoreCase("Chrome")) {
+                ChromeOptions options = new ChromeOptions();
+                options.setCapability("browserName", "chrome");
+                driver = new RemoteWebDriver(new URL(node), options);
+            } else if(browser.equalsIgnoreCase("Firefox")) {
+                FirefoxOptions options = new FirefoxOptions();
+                options.setCapability("browserName", "firefox");
+                driver = new RemoteWebDriver(new URL(node), options);
+            } else {
+                throw new IllegalArgumentException("Unsupported browser: " + browser);
+            }
+            setWebDriver(driver);
+        } catch(MalformedURLException e) {
+            throw new IllegalArgumentException("Invalid node URL: " + node);
         }
-        setWebDriver(driver);
    }
 
    @AfterMethod
