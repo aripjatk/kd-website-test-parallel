@@ -42,7 +42,7 @@ public class TicketPurchaseTest extends AbstractTest {
         return steps;
     }
 
-    @Test
+    @Test(groups = "purchase")
     public void testPurchaseTicket() {
         ConnectionQuery query = new ConnectionQueryBuilder()
             .setFromStation("Wrocław Główny")

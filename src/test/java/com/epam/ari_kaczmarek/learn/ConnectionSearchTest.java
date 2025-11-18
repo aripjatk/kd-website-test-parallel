@@ -34,7 +34,7 @@ public class ConnectionSearchTest extends AbstractTest {
         return steps;
     }
 
-    @Test
+    @Test(groups = { "search", "searchToday"})
     public void testConnectionSearchToday() {
         ConnectionQuery query = new ConnectionQueryBuilder()
             .setFromStation("Wrocław Główny")
@@ -45,7 +45,7 @@ public class ConnectionSearchTest extends AbstractTest {
         createSteps(query).get(0).run();
     }
 
-    @Test
+    @Test(groups = { "search", "searchNextMonth"} )
     public void testConnectionSearchNextMonth() {
         ConnectionQuery query = new ConnectionQueryBuilder()
             .setFromStation("Wrocław Główny")
